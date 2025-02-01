@@ -1,6 +1,7 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import TodoList from "../components/TodoList";
 
 const Dashboard: React.FC = () => {
   const { logout } = useAuth();
@@ -9,11 +10,14 @@ const Dashboard: React.FC = () => {
   return (
     <div>
       <h1>Dashboard</h1>
-      <button
-        onClick={() => {
-          logout();
-          navigate('/');
-        }}
+      <nav>
+        <Link to={'/profile/chaim'}>My Profile</Link>
+      </nav>
+      <TodoList/>
+      <button onClick={() => {
+        logout();
+        navigate('/');
+      }}
       >
         Logout
       </button>
