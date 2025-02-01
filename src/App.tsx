@@ -8,7 +8,7 @@ import { store } from './store/store';
 const App: React.FC = () => {
   return (
     <div>
-      <Header title={'React Advanced Project - Forms & Validation with React Hook Form & Yup'} />
+      <Header title={ 'React Advanced Project - Enhancing Authentication with JWT Tokens' } />
       <p>{'client-side routing with react-router-dom'}</p>
       <AuthProvider>
         <Provider store={store}>
