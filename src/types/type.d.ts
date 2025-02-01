@@ -4,3 +4,8 @@ export interface Todo {
   text: string;
   completed: boolean;
 }
+
+export type Action =
+  | { type: "ADD"; payload: string }
+  | { type: "TOGGLE"; payload: number }
+  | { type: "REMOVE"; payload: number };

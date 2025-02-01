@@ -1,51 +1,59 @@
-import React, { useState, useEffect } from 'react';
-import { Todo } from '../types/type';
+import React, { useReducer, useRef } from 'react';
+import { Action, Todo } from '../types/type';
+import useLocalStorage from '../hooks/useLocalStorage';
+
+/**
+ * The reducer function takes the current state and an action and returns the new state.
+ * Each case modifies the state immutably (never directly modifying state).
+ * This helps React detect changes efficiently and re-render only when needed.
+ */
+const todoReducer = (state: Todo[], action: Action): Todo[] => {
+  switch (action.type) {
+    case 'ADD':
+      return [
+        ...state,
+        { id: Date.now(), text: action.payload, completed: false },
+      ];
+    case 'TOGGLE':
+      return state.map((todo) =>
+        todo.id === action.payload
+          ? { ...todo, completed: !todo.completed }
+          : todo,
+      );
+    case 'REMOVE':
+      return state.filter((todo) => todo.id !== action.payload);
+    default:
+      return state;
+  }
+};
 
 const TodoList: React.FC = () => {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [input, setInput] = useState('');
+  const [todos, setTodos] = useLocalStorage<Todo[]>('todos', []);
 
-  useEffect(() => {
-    const savedTodos = localStorage.getItem('todos');
-    if (savedTodos) {
-      setTodos(JSON.parse(savedTodos));
-    }
-  }, []);
+  // state: Holds the current list of todos.
+  // dispatch: A function used to send actions to the reducer.
+  // todoReducer: The function that determines how state changes based on actions.
+  const [state, dispatch] = useReducer(todoReducer, todos);
 
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
+  // inputRef holds a reference to the input field. <HTMLInputElement> ensures TypeScript knows the reference type
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const addTodo = () => {
-    if (input.trim() === '') return;
-    setTodos([...todos, { id: Date.now(), text: input, completed: false }]);
-    setInput('');
-  };
-
-  const toggleComplete = (id: number) => {
-    setTodos(
-      todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-      ),
-    );
-  };
-
-  const removeTodo = (id: number) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    if (inputRef.current && inputRef.current.value.trim()) {
+      // This tells the reducer to add a new todo. The reducer updates state, and React re-renders the UI.
+      dispatch({ type: 'ADD', payload: inputRef.current.value });
+      inputRef.current.value = ''; // Clear input
+    }
   };
 
   return (
     <div>
-      <input
-        type={'text'}
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder={'Enter a todo...'}
-      />
+      {/* This assigns inputRef to the <input> field. Now, inputRef.current will point to the actual input element. */}
+      <input ref={inputRef} type={'text'} placeholder={'Enter a todo...'} />
       <button onClick={addTodo}>Add Todo</button>
 
       <ul>
-        {todos.map((todo) => (
+        {state.map((todo) => (
           <li
             key={todo.id}
             style={{ textDecoration: todo.completed ? 'line-through' : 'none' }}
@@ -60,8 +68,16 @@ const TodoList: React.FC = () => {
             >
               {todo.text}
               <div>
-                <button onClick={() => toggleComplete(todo.id)}>✓</button>
-                <button onClick={() => removeTodo(todo.id)}>✗</button>
+                <button
+                  onClick={() => dispatch({ type: 'TOGGLE', payload: todo.id })}
+                >
+                  ✓
+                </button>
+                <button
+                  onClick={() => dispatch({ type: 'REMOVE', payload: todo.id })}
+                >
+                  ✗
+                </button>
               </div>
             </div>
           </li>
