@@ -1,16 +1,33 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HomePage from '../pages/Home';
-import AboutPage from '../pages/About';
-import NotFoundPage from '../pages/NotFound';
+import ProtectedRoute from './ProtectedRoute';
+import { useAuth } from '../context/AuthContext';
+import About from '../pages/About';
+import Dashboard from '../pages/Dashboard';
+import Home from '../pages/Home';
+import Login from '../pages/Login';
+import NotFound from '../pages/NotFound';
+import Profile from '../pages/Profile';
 
 const AppRouter: React.FC = () => {
+  const { isAuthenticated } = useAuth();
+
   return (
     <Router>
       <Routes>
-        <Route path={'/'} element={<HomePage />} />
-        <Route path={'/about'} element={<AboutPage />} />
-        <Route path={'*'} element={<NotFoundPage />} />
+        <Route path={'/'} element={<Home />} />
+        <Route path={'/about'} element={<About />} />
+        <Route path={'/login'} element={<Login />} />
+        <Route
+          path={'/dashboard'}
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route path={'/profile/:id'} element={<Profile />} />
+        <Route path={'*'} element={<NotFound />} />
       </Routes>
     </Router>
   );
