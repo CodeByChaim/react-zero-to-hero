@@ -1,7 +1,6 @@
 
 ## **📌 Step 1: Project Setup using CRA**
-### **Goal:**
-Set up a **scalable** React/TypeScript project with a clean folder structure.
+### **Goal:** Set up a **scalable** React/TypeScript project with a clean folder structure.
 
 ---
 
