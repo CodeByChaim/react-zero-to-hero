@@ -1,4 +1,9 @@
 
+export interface LoginFormInputs {
+  email: string;
+  password: string;
+}
+
 export interface Todo {
   id: number;
   text: string;
