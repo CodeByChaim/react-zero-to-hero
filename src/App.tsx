@@ -4,8 +4,11 @@ import AppRouter from './routes/Router';
 import Header from './components/Header';
 // import { AuthProvider } from './context/AuthContext';
 import { store } from './store/store';
+import { useAuthCheck } from './hooks/useAuthCheck';
 
 const App: React.FC = () => {
+  useAuthCheck();
+
   return (
     <div>
       <Header title={'React Advanced Project - State Management with Redux'} />

@@ -1,4 +1,5 @@
 import React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,7 +20,7 @@ const schema = yup.object({
 const dummyApiLogin = async (data: LoginFormInputs) => {
   console.log('Form Data:', data);
   return new Promise<{ token: string }>((resolve) =>
-    setTimeout(() => resolve({ token: 'fake-jwt-token-12345' }), 1000),
+    setTimeout(() => resolve({ token: uuidv4() }), 1000),
   );
 };
 
