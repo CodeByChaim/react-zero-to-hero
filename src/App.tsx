@@ -2,19 +2,19 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import AppRouter from './routes/Router';
 import Header from './components/Header';
-import { AuthProvider } from './context/AuthContext';
+// import { AuthProvider } from './context/AuthContext';
 import { store } from './store/store';
 
 const App: React.FC = () => {
   return (
     <div>
-      <Header title={ 'React Advanced Project - Enhancing Authentication with JWT Tokens' } />
+      <Header title={'React Advanced Project - State Management with Redux'} />
       <p>{'client-side routing with react-router-dom'}</p>
-      <AuthProvider>
-        <Provider store={store}>
+      {/*<AuthProvider>*/}
+      <Provider store={store}>
         <AppRouter />
-        </Provider>
-      </AuthProvider>
+      </Provider>
+      {/*</AuthProvider>*/}
     </div>
   );
 };

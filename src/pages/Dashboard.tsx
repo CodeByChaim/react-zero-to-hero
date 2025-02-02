@@ -1,10 +1,11 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import TodoList from "../components/TodoList";
+import { useDispatch } from 'react-redux';
+import { logout } from '../store/authSlice';
+import TodoList from '../components/TodoList';
 
 const Dashboard: React.FC = () => {
-  const { logout } = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   return (
@@ -13,11 +14,12 @@ const Dashboard: React.FC = () => {
       <nav>
         <Link to={'/profile/chaim'}>My Profile</Link>
       </nav>
-      <TodoList/>
-      <button onClick={() => {
-        logout();
-        navigate('/');
-      }}
+      <TodoList />
+      <button
+        onClick={() => {
+          dispatch(logout());
+          navigate('/');
+        }}
       >
         Logout
       </button>
